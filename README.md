@@ -22,37 +22,37 @@ Data collected from enterprise user-activity and access logs is cleaned, transfo
 
 ```mermaid
 flowchart TD
-    subgraph Data Layer ["1. Enterprise SIEM Sensor Ingestion"]
-        A1["Authentication Logs<br/>(Logon/Logoff, Event ID 4624/4625)"]
-        A2["File System Audit<br/>(Access, Copy, Sensitive Paths)"]
-        A3["Perimeter & Cloud SaaS<br/>(Webmail, Mega, Dropbox)"]
-        A4["Removable Media<br/>(USB Flash Drive Insertion)"]
+    subgraph Data_Layer ["1. Enterprise SIEM Sensor Ingestion"]
+        A1["Authentication Logs<br/>Logon/Logoff, Event ID 4624/4625"]
+        A2["File System Audit<br/>Access, Copy, Sensitive Paths"]
+        A3["Perimeter & Cloud SaaS<br/>Webmail, Mega, Dropbox"]
+        A4["Removable Media<br/>USB Flash Drive Insertion"]
     end
 
-    subgraph Feature Engineering ["2. UEBA Behavioral Feature Engine"]
-        B1["Temporal & Shift Deviations<br/>(Off-hours ratio, weekend events)"]
-        B2["Volumetric Metrics<br/>(Total MB, Cloud Upload MB)"]
-        B3["Credential Anomaly<br/>(Failed login ratio, lateral hosts)"]
-        B4["Peer Group Normalization<br/>(Departmental baseline Z-Score)"]
+    subgraph Feature_Engineering ["2. UEBA Behavioral Feature Engine"]
+        B1["Temporal & Shift Deviations<br/>Off-hours ratio, weekend events"]
+        B2["Volumetric Metrics<br/>Total MB, Cloud Upload MB"]
+        B3["Credential Anomaly<br/>Failed login ratio, lateral hosts"]
+        B4["Peer Group Normalization<br/>Departmental baseline Z-Score"]
     end
 
-    subgraph ML Engine ["3. Isolation Forest Anomaly Detection"]
-        C1["Ensemble of iTrees (n=180)"]
+    subgraph ML_Engine ["3. Isolation Forest Anomaly Detection"]
+        C1["Ensemble of iTrees - 180 Trees"]
         C2["Recursive Partitioning & Path Lengths h(x)"]
-        C3["Calibrated Risk Scoring (0 - 100)"]
-        C4["Explainable AI (XAI) Attribution Module"]
+        C3["Calibrated Risk Scoring - 0 to 100"]
+        C4["Explainable AI Attribution Module"]
     end
 
-    subgraph SOC Operations ["4. Security Analyst Risk Queue & Response"]
-        D1["Prioritized Incident Queue<br/>(Critical, High, Medium, Low)"]
+    subgraph SOC_Operations ["4. Security Analyst Risk Queue & Response"]
+        D1["Prioritized Incident Queue<br/>Critical, High, Medium, Low"]
         D2["Analyst Dossier & Radar Peer Charts"]
         D3["Automated Containment Playbooks"]
-        D4["Incident Briefing Export (.md / .csv)"]
+        D4["Incident Briefing Export - Markdown / CSV"]
     end
 
-    Data Layer --> Feature Engineering
-    Feature Engineering --> ML Engine
-    ML Engine --> SOC Operations
+    Data_Layer --> Feature_Engineering
+    Feature_Engineering --> ML_Engine
+    ML_Engine --> SOC_Operations
 ```
 
 ---
