@@ -1,0 +1,5 @@
+model,precision,recall,f1_score,roc_auc,pr_auc,false_positive_rate,true_positives,false_positives,true_negatives,false_negatives,inference_latency_ms
+Isolation Forest (Proposed),1.0,1.0,1.0,1.0,1.0,0.0,9,0,141,0,1.622
+One-Class SVM,0.7778,0.7778,0.7778,0.777,0.7765,0.0142,7,2,139,2,0.006
+Local Outlier Factor (LOF),1.0,1.0,1.0,1.0,1.0,0.0,9,0,141,0,26.67
+Peer Z-Score Heuristic,1.0,0.6667,0.8,1.0,1.0,0.0,6,0,141,3,0.001

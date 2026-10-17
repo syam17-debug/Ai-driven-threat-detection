@@ -1,0 +1,62 @@
+{
+  "USR_0001": {
+    "status": "UNDER_INVESTIGATION",
+    "analyst_notes": "Bulk triage initiated from SOC queue.",
+    "assigned_analyst": "SOC_Analyst_1",
+    "last_updated": "2026-10-17 18:28:49"
+  },
+  "USR_0002": {
+    "status": "UNDER_INVESTIGATION",
+    "analyst_notes": "Bulk triage initiated from SOC queue.",
+    "assigned_analyst": "SOC_Analyst_1",
+    "last_updated": "2026-10-17 18:28:49"
+  },
+  "USR_0006": {
+    "status": "UNDER_INVESTIGATION",
+    "analyst_notes": "Bulk triage initiated from SOC queue.",
+    "assigned_analyst": "SOC_Analyst_1",
+    "last_updated": "2026-10-17 18:28:49"
+  },
+  "USR_0009": {
+    "status": "UNDER_INVESTIGATION",
+    "analyst_notes": "Bulk triage initiated from SOC queue.",
+    "assigned_analyst": "SOC_Analyst_1",
+    "last_updated": "2026-10-17 18:28:49"
+  },
+  "USR_0005": {
+    "status": "UNDER_INVESTIGATION",
+    "analyst_notes": "Bulk triage initiated from SOC queue.",
+    "assigned_analyst": "SOC_Analyst_1",
+    "last_updated": "2026-10-17 18:28:49"
+  },
+  "USR_0004": {
+    "status": "UNDER_INVESTIGATION",
+    "analyst_notes": "Bulk triage initiated from SOC queue.",
+    "assigned_analyst": "SOC_Analyst_1",
+    "last_updated": "2026-10-17 18:28:49"
+  },
+  "USR_0008": {
+    "status": "UNDER_INVESTIGATION",
+    "analyst_notes": "Bulk triage initiated from SOC queue.",
+    "assigned_analyst": "SOC_Analyst_1",
+    "last_updated": "2026-10-17 18:28:49"
+  },
+  "USR_0003": {
+    "status": "UNDER_INVESTIGATION",
+    "analyst_notes": "Bulk triage initiated from SOC queue.",
+    "assigned_analyst": "SOC_Analyst_1",
+    "last_updated": "2026-10-17 18:28:49"
+  },
+  "USR_0007": {
+    "status": "UNDER_INVESTIGATION",
+    "analyst_notes": "Bulk triage initiated from SOC queue.",
+    "assigned_analyst": "SOC_Analyst_1",
+    "last_updated": "2026-10-17 18:28:49"
+  },
+  "USR_0024": {
+    "status": "UNDER_INVESTIGATION",
+    "analyst_notes": "Bulk triage initiated from SOC queue.",
+    "assigned_analyst": "SOC_Analyst_1",
+    "last_updated": "2026-10-17 18:28:49"
+  }
+}
