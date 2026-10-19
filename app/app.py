@@ -58,80 +58,310 @@ st.set_page_config(
 # Custom High-Tech Cyber SOC Styling
 st.markdown("""
 <style>
-    /* Dark SOC aesthetic */
-    .stApp {
-        background-color: #0b0f19;
-        color: #e2e8f0;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+    html, body, [class*="css"] {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
+    .stApp {
+        background: radial-gradient(circle at 12% 8%, rgba(14, 165, 233, 0.09) 0%, transparent 40%),
+                    radial-gradient(circle at 88% 90%, rgba(168, 85, 247, 0.08) 0%, transparent 45%),
+                    #080c14;
+        color: #f1f5f9;
+    }
+    
+    /* Command Header Banner */
+    .soc-header-banner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(15, 23, 42, 0.65) 100%);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(56, 189, 248, 0.22);
+        border-radius: 16px;
+        padding: 24px 28px;
+        margin-bottom: 22px;
+        box-shadow: 0 12px 36px -10px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+    .soc-header-banner::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #00f2fe 0%, #38bdf8 40%, #818cf8 80%, transparent 100%);
+    }
+    .soc-main-title {
+        font-size: 2.15rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        margin: 0 0 6px 0;
+        background: linear-gradient(135deg, #ffffff 15%, #38bdf8 65%, #c084fc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .soc-sub-title {
+        font-size: 0.92rem;
+        color: #94a3b8;
+        margin: 0;
+        font-weight: 400;
+        line-height: 1.4;
+    }
+    .soc-pulse-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(16, 185, 129, 0.12);
+        border: 1px solid rgba(16, 185, 129, 0.35);
+        color: #34d399;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 4px 12px;
+        border-radius: 20px;
+        margin-bottom: 8px;
+    }
+    .pulsing-dot {
+        width: 8px;
+        height: 8px;
+        background: #10b981;
+        border-radius: 50%;
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+        animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+        70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+    .soc-defense-pill {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(30, 41, 59, 0.7);
+        border: 1px solid rgba(56, 189, 248, 0.25);
+        padding: 10px 18px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    .pill-label {
+        font-size: 0.68rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 700;
+    }
+    .pill-val {
+        font-size: 0.96rem;
+        color: #38bdf8;
+        font-weight: 700;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Modern Glassmorphic KPI Cards */
     .metric-card {
-        background: linear-gradient(135deg, #131b2e 0%, #1e293b 100%);
-        border: 1px solid #334155;
-        border-radius: 10px;
-        padding: 16px 20px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.88) 0%, rgba(30, 41, 59, 0.65) 100%);
+        backdrop-filter: blur(16px);
+        border-radius: 14px;
+        padding: 18px 20px;
+        border: 1px solid rgba(56, 189, 248, 0.16);
+        box-shadow: 0 10px 28px -5px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .metric-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.7), 0 0 20px rgba(56, 189, 248, 0.22);
+        border-color: rgba(56, 189, 248, 0.38);
+    }
+    .metric-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+    }
+    .card-cyan::before { background: linear-gradient(90deg, #00f2fe, #38bdf8); }
+    .card-crimson::before { background: linear-gradient(90deg, #ff3366, #ef4444); }
+    .card-amber::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+    .card-blue::before { background: linear-gradient(90deg, #38bdf8, #60a5fa); }
+    .card-purple::before { background: linear-gradient(90deg, #a855f7, #c084fc); }
+
+    .card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
     }
     .metric-title {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.07em;
+        font-weight: 700;
         color: #94a3b8;
-        margin-bottom: 6px;
+    }
+    .metric-icon-box {
+        font-size: 1.15rem;
+        opacity: 0.9;
     }
     .metric-value {
-        font-size: 1.85rem;
-        font-weight: 700;
-        color: #38bdf8;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 2.15rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 6px;
     }
+    .text-cyan { color: #00f2fe; text-shadow: 0 0 18px rgba(0, 242, 254, 0.35); }
+    .text-crimson { color: #ff3366; text-shadow: 0 0 18px rgba(255, 51, 102, 0.45); }
+    .text-amber { color: #f59e0b; text-shadow: 0 0 18px rgba(245, 158, 11, 0.35); }
+    .text-blue { color: #38bdf8; text-shadow: 0 0 18px rgba(56, 189, 248, 0.35); }
+    .text-purple { color: #c084fc; text-shadow: 0 0 18px rgba(192, 132, 252, 0.35); }
+    
     .metric-sub {
-        font-size: 0.78rem;
+        font-size: 0.77rem;
         color: #64748b;
-        margin-top: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
-    .badge-critical {
-        background-color: #ef4444;
-        color: white;
-        padding: 3px 10px;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 0.8rem;
-    }
-    .badge-high {
-        background-color: #f97316;
-        color: white;
-        padding: 3px 10px;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 0.8rem;
-    }
-    .badge-medium {
-        background-color: #eab308;
-        color: black;
-        padding: 3px 10px;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 0.8rem;
-    }
-    .badge-low {
-        background-color: #22c55e;
-        color: white;
-        padding: 3px 10px;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 0.8rem;
-    }
-    /* Tabs and interactive elements */
+
+    /* Tabs Styling */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 12px;
+        gap: 8px;
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(14px);
+        padding: 6px;
+        border-radius: 12px;
+        border: 1px solid rgba(56, 189, 248, 0.16);
+        margin-bottom: 22px;
     }
     .stTabs [data-baseweb="tab"] {
-        background-color: #1e293b;
-        border-radius: 8px 8px 0px 0px;
-        padding: 10px 20px;
+        background: transparent;
+        border-radius: 8px;
+        padding: 9px 20px;
         color: #94a3b8;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.2s ease-in-out;
+        border: 1px solid transparent;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #f1f5f9;
+        background: rgba(51, 65, 85, 0.45);
     }
     .stTabs [aria-selected="true"] {
-        background-color: #0284c7 !important;
-        color: white !important;
+        background: linear-gradient(135deg, rgba(6, 182, 212, 0.24), rgba(59, 130, 246, 0.28)) !important;
+        border: 1px solid #00f2fe !important;
+        color: #00f2fe !important;
+        box-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+    }
+
+    /* Multiselect Tags - Sleek Cyan/Slate Overhaul (Fixes squished red tags) */
+    .stMultiSelect [data-baseweb="tag"] {
+        background: rgba(14, 165, 233, 0.15) !important;
+        border: 1px solid rgba(56, 189, 248, 0.4) !important;
+        color: #38bdf8 !important;
+        border-radius: 6px !important;
+        font-size: 0.8rem !important;
+        font-weight: 600 !important;
+        padding: 3px 8px !important;
+    }
+    .stMultiSelect [data-baseweb="tag"] span {
+        color: #e2e8f0 !important;
+    }
+    .stMultiSelect [data-baseweb="tag"] svg {
+        fill: #38bdf8 !important;
+    }
+
+    /* Badges */
+    .badge-critical {
+        background: rgba(239, 68, 68, 0.18);
+        border: 1px solid #ef4444;
+        color: #fca5a5;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.78rem;
+        letter-spacing: 0.04em;
+        box-shadow: 0 0 14px rgba(239, 68, 68, 0.35);
+    }
+    .badge-high {
+        background: rgba(249, 115, 22, 0.18);
+        border: 1px solid #f97316;
+        color: #fdba74;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.78rem;
+    }
+    .badge-medium {
+        background: rgba(234, 179, 8, 0.18);
+        border: 1px solid #eab308;
+        color: #fde047;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.78rem;
+    }
+    .badge-low {
+        background: rgba(34, 197, 94, 0.18);
+        border: 1px solid #22c55e;
+        color: #86efac;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.78rem;
+    }
+
+    /* High-Tech Buttons */
+    .stButton > button {
+        background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(56, 189, 248, 0.4) !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.02em !important;
+        box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35) !important;
+        transition: all 0.25s ease !important;
+    }
+    .stButton > button:hover {
+        box-shadow: 0 6px 22px rgba(56, 189, 248, 0.55) !important;
+        transform: translateY(-1px) !important;
+        border-color: #00f2fe !important;
+    }
+    .stDownloadButton > button {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%) !important;
+        border: 1px solid rgba(148, 163, 184, 0.3) !important;
+        color: #f1f5f9 !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+    }
+    .stDownloadButton > button:hover {
+        border-color: #38bdf8 !important;
+        color: #38bdf8 !important;
+    }
+
+    /* Sidebar Aesthetics */
+    [data-testid="stSidebar"] {
+        background: #080c14 !important;
+        border-right: 1px solid rgba(56, 189, 248, 0.12) !important;
+    }
+    .sidebar-header-box {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.5) 100%);
+        border: 1px solid rgba(56, 189, 248, 0.25);
+        border-radius: 12px;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -217,10 +447,15 @@ scored_users_df = scored_users_df.sort_values(by="risk_score", ascending=False).
 # SIDEBAR CONTROLS & SOC FILTERS
 # ==========================================
 with st.sidebar:
-    st.image("https://img.icons8.com/color/96/shield.png", width=64)
-    st.title("🛡️ SOC Threat Intel")
-    st.caption("AI-Driven Insider Threat Detection System")
-    st.markdown("---")
+    st.markdown("""
+    <div class="sidebar-header-box">
+        <div style="font-size: 2.2rem; filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.4));">🛡️</div>
+        <div>
+            <div style="font-size: 1.15rem; font-weight: 800; color: #f8fafc; letter-spacing: -0.02em;">CYBER COMMAND</div>
+            <div style="font-size: 0.72rem; color: #38bdf8; font-weight: 700; letter-spacing: 0.08em;">SOC INTEL // ISOLATION FOREST</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.subheader("Filter Risk Queue")
     selected_dept = st.multiselect(
@@ -264,54 +499,87 @@ with st.sidebar:
 # ==========================================
 # TOP TELEMETRY / KPI HEADER
 # ==========================================
-st.markdown("## 🛡️ Enterprise Insider-Risk Telemetry & Triage Queue")
-st.caption(f"Active Monitoring: {len(scored_users_df)} Employees | Sensor Stream: Enterprise Authentication, File I/O, Removable USB, Cloud SaaS, & Email Gateway")
-
 total_users = len(scored_users_df)
 critical_count = (scored_users_df["risk_tier"] == "CRITICAL").sum()
 high_count = (scored_users_df["risk_tier"] == "HIGH").sum()
 active_triages = (scored_users_df["triage_status"].isin(["NEW_ALERT", "UNDER_INVESTIGATION"])).sum()
 avg_risk = scored_users_df["risk_score"].mean()
 
+st.markdown(f"""
+<div class="soc-header-banner">
+    <div style="max-width: 72%;">
+        <div class="soc-pulse-badge">
+            <span class="pulsing-dot"></span> LIVE SENSOR STREAM ACTIVE
+        </div>
+        <h1 class="soc-main-title">Enterprise Insider-Risk Telemetry & Triage Queue</h1>
+        <p class="soc-sub-title">Unsupervised User & Entity Behavior Analytics (UEBA) • Active Surveillance: <b style="color: #38bdf8;">{total_users} Accounts</b> across 6 Corporate Divisions</p>
+    </div>
+    <div>
+        <div class="soc-defense-pill">
+            <span style="font-size: 1.6rem;">⚡</span>
+            <div>
+                <div class="pill-label">DETECTION CORE</div>
+                <div class="pill-val">Isolation Forest v2.4</div>
+            </div>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
 col1, col2, col3, col4, col5 = st.columns(5)
 with col1:
     st.markdown(f"""
-    <div class="metric-card">
-        <div class="metric-title">Monitored Accounts</div>
-        <div class="metric-value">{total_users}</div>
-        <div class="metric-sub">Across 6 Enterprise Units</div>
+    <div class="metric-card card-cyan">
+        <div class="card-top">
+            <span class="metric-title">Monitored Accounts</span>
+            <span class="metric-icon-box">👥</span>
+        </div>
+        <div class="metric-value text-cyan">{total_users}</div>
+        <div class="metric-sub"><span style="color:#00f2fe;">●</span> 6 Enterprise Units</div>
     </div>
     """, unsafe_allow_html=True)
 with col2:
     st.markdown(f"""
-    <div class="metric-card">
-        <div class="metric-title">Critical Anomalies</div>
-        <div class="metric-value" style="color: #ef4444;">{critical_count}</div>
-        <div class="metric-sub">Immediate Action Required</div>
+    <div class="metric-card card-crimson">
+        <div class="card-top">
+            <span class="metric-title">Critical Anomalies</span>
+            <span class="metric-icon-box">🚨</span>
+        </div>
+        <div class="metric-value text-crimson">{critical_count}</div>
+        <div class="metric-sub"><span style="color:#ff3366;">●</span> Immediate Action Required</div>
     </div>
     """, unsafe_allow_html=True)
 with col3:
     st.markdown(f"""
-    <div class="metric-card">
-        <div class="metric-title">High Risk Queue</div>
-        <div class="metric-value" style="color: #f97316;">{high_count}</div>
-        <div class="metric-sub">Significant Deviation</div>
+    <div class="metric-card card-amber">
+        <div class="card-top">
+            <span class="metric-title">High Risk Queue</span>
+            <span class="metric-icon-box">⚠️</span>
+        </div>
+        <div class="metric-value text-amber">{high_count}</div>
+        <div class="metric-sub"><span style="color:#f59e0b;">●</span> Significant Deviation</div>
     </div>
     """, unsafe_allow_html=True)
 with col4:
     st.markdown(f"""
-    <div class="metric-card">
-        <div class="metric-title">Pending Investigation</div>
-        <div class="metric-value" style="color: #38bdf8;">{active_triages}</div>
-        <div class="metric-sub">Awaiting Analyst Review</div>
+    <div class="metric-card card-blue">
+        <div class="card-top">
+            <span class="metric-title">Pending Investigation</span>
+            <span class="metric-icon-box">⏳</span>
+        </div>
+        <div class="metric-value text-blue">{active_triages}</div>
+        <div class="metric-sub"><span style="color:#38bdf8;">●</span> Awaiting Analyst Review</div>
     </div>
     """, unsafe_allow_html=True)
 with col5:
     st.markdown(f"""
-    <div class="metric-card">
-        <div class="metric-title">Mean Enterprise Risk</div>
-        <div class="metric-value" style="color: #a855f7;">{avg_risk:.1f}/100</div>
-        <div class="metric-sub">Baseline Operational State</div>
+    <div class="metric-card card-purple">
+        <div class="card-top">
+            <span class="metric-title">Mean Enterprise Risk</span>
+            <span class="metric-icon-box">🌐</span>
+        </div>
+        <div class="metric-value text-purple">{avg_risk:.1f}<span style="font-size:1.1rem; color:#94a3b8; font-weight:500;">/100</span></div>
+        <div class="metric-sub"><span style="color:#c084fc;">●</span> Baseline Operational</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -484,8 +752,8 @@ with tab_investigation:
         )
         fig_bar.update_layout(
             template="plotly_dark",
-            paper_bgcolor="#131b2e",
-            plot_bgcolor="#131b2e",
+            paper_bgcolor="rgba(15, 23, 42, 0.85)",
+            plot_bgcolor="rgba(15, 23, 42, 0.85)",
             yaxis={"categoryorder": "total ascending"},
             height=320,
             margin=dict(l=20, r=20, t=40, b=20)
@@ -530,7 +798,7 @@ with tab_investigation:
             polar=dict(radialaxis=dict(visible=True, range=[0, 100])),
             showlegend=True,
             template="plotly_dark",
-            paper_bgcolor="#131b2e",
+            paper_bgcolor="rgba(15, 23, 42, 0.85)",
             title=f"Peer Group Comparison ({dept_name})",
             height=320,
             margin=dict(l=30, r=30, t=40, b=20)
@@ -561,8 +829,8 @@ with tab_investigation:
     )
     fig_time.update_layout(
         template="plotly_dark",
-        paper_bgcolor="#131b2e",
-        plot_bgcolor="#131b2e",
+        paper_bgcolor="rgba(15, 23, 42, 0.85)",
+        plot_bgcolor="rgba(15, 23, 42, 0.85)",
         height=240,
         margin=dict(l=20, r=20, t=40, b=20)
     )
@@ -705,8 +973,8 @@ with tab_benchmark:
             xaxis_title="False Positive Rate",
             yaxis_title="True Positive Rate (Recall)",
             template="plotly_dark",
-            paper_bgcolor="#131b2e",
-            plot_bgcolor="#131b2e",
+            paper_bgcolor="rgba(15, 23, 42, 0.85)",
+            plot_bgcolor="rgba(15, 23, 42, 0.85)",
             height=340,
             margin=dict(l=20, r=20, t=40, b=20)
         )
@@ -726,8 +994,8 @@ with tab_benchmark:
             xaxis_title="Recall",
             yaxis_title="Precision",
             template="plotly_dark",
-            paper_bgcolor="#131b2e",
-            plot_bgcolor="#131b2e",
+            paper_bgcolor="rgba(15, 23, 42, 0.85)",
+            plot_bgcolor="rgba(15, 23, 42, 0.85)",
             height=340,
             margin=dict(l=20, r=20, t=40, b=20)
         )
@@ -746,8 +1014,8 @@ with tab_benchmark:
     fig_hist.add_vline(x=detector.threshold, line_dash="dash", line_color="red", annotation_text="Contamination Cutoff")
     fig_hist.update_layout(
         template="plotly_dark",
-        paper_bgcolor="#131b2e",
-        plot_bgcolor="#131b2e",
+        paper_bgcolor="rgba(15, 23, 42, 0.85)",
+        plot_bgcolor="rgba(15, 23, 42, 0.85)",
         height=280,
         margin=dict(l=20, r=20, t=40, b=20)
     )
