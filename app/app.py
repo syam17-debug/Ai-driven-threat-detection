@@ -319,6 +319,47 @@ st.markdown("""
         font-size: 0.78rem;
     }
 
+    /* SOC Threat Intelligence Detection Cards */
+    .soc-threat-alert-box {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.16) 0%, rgba(153, 27, 27, 0.12) 100%);
+        border: 1px solid rgba(239, 68, 68, 0.45);
+        border-left: 5px solid #ef4444;
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin: 16px 0 20px 0;
+        box-shadow: 0 4px 20px rgba(239, 68, 68, 0.18);
+    }
+    .soc-medium-alert-box {
+        background: linear-gradient(135deg, rgba(234, 179, 8, 0.14) 0%, rgba(161, 98, 7, 0.1) 100%);
+        border: 1px solid rgba(234, 179, 8, 0.45);
+        border-left: 5px solid #eab308;
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin: 16px 0 20px 0;
+    }
+    .soc-normal-alert-box {
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(6, 95, 70, 0.08) 100%);
+        border: 1px solid rgba(16, 185, 129, 0.45);
+        border-left: 5px solid #10b981;
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin: 16px 0 20px 0;
+    }
+    .soc-alert-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        font-size: 0.95rem;
+        letter-spacing: 0.04em;
+        margin-bottom: 8px;
+    }
+    .soc-alert-body {
+        font-size: 0.9rem;
+        color: #f1f5f9;
+        line-height: 1.55;
+    }
+
     /* High-Tech Buttons */
     .stButton > button {
         background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
@@ -729,9 +770,44 @@ with tab_investigation:
 
     # Threat Intelligence Narrative Alert Box
     if curr_user_row["risk_tier"] in ["CRITICAL", "HIGH"]:
-        st.error(f"🚨 **ANOMALOUS ACTIVITY DETECTED:** {explanation['analyst_narrative']}")
+        st.markdown(f"""
+        <div class="soc-threat-alert-box">
+            <div class="soc-alert-title" style="color: #fca5a5;">
+                <span style="font-size: 1.25rem;">🚨</span> 
+                <span>CRITICAL SECURITY ALERT // ANOMALOUS INSIDER DETECTED</span>
+                <span class="badge-critical" style="margin-left: auto;">RISK: {curr_user_row['risk_score']:.1f}/100</span>
+            </div>
+            <div class="soc-alert-body">
+                {explanation['analyst_narrative']}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    elif curr_user_row["risk_tier"] == "MEDIUM":
+        st.markdown(f"""
+        <div class="soc-medium-alert-box">
+            <div class="soc-alert-title" style="color: #fde047;">
+                <span style="font-size: 1.25rem;">⚠️</span> 
+                <span>ELEVATED RISK NOTICE // BEHAVIORAL DEVIATION</span>
+                <span class="badge-medium" style="margin-left: auto;">RISK: {curr_user_row['risk_score']:.1f}/100</span>
+            </div>
+            <div class="soc-alert-body">
+                {explanation['analyst_narrative']}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     else:
-        st.success(f"✅ **NORMAL BASELINE:** {explanation['analyst_narrative']}")
+        st.markdown(f"""
+        <div class="soc-normal-alert-box">
+            <div class="soc-alert-title" style="color: #86efac;">
+                <span style="font-size: 1.25rem;">✅</span> 
+                <span>NOMINAL OPERATIONAL BASELINE // NO ANOMALIES DETECTED</span>
+                <span class="badge-low" style="margin-left: auto;">RISK: {curr_user_row['risk_score']:.1f}/100</span>
+            </div>
+            <div class="soc-alert-body">
+                {explanation['analyst_narrative']}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
         
     # Visualizations Row 1: XAI Feature Attribution & Radar Peer Comparison
     st.markdown("#### 🧠 Anomaly Attribution & Peer Baseline Comparison")

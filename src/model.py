@@ -179,8 +179,10 @@ class IsolationForestAnomalyDetector:
                 narrative_parts.append(f"Exfiltrated {val:.1f} MB via unauthorized cloud storage endpoints")
             elif "usb" in f_name and val > 0:
                 narrative_parts.append(f"Connected unauthorized external USB media {int(val)} times")
+            elif f_name == "off_hours_ratio" and mult > 1.5:
+                narrative_parts.append(f"Excessive off-hours ratio: {val*100:.1f}% of activity took place outside normal 08:00-18:00 shift")
             elif "off_hours" in f_name and mult > 2.0:
-                narrative_parts.append(f"{mult:.1f}x higher off-hours activity ({int(val)} events outside normal 08:00-18:00 shift)")
+                narrative_parts.append(f"{mult:.1f}x higher off-hours activity ({int(val)} events outside normal shift)")
             elif "failed_login" in f_name and val > 0:
                 narrative_parts.append(f"Recorded {int(val)} failed login attempts indicating credential probing / brute-force")
             elif "sensitive" in f_name and val > 0:
@@ -189,8 +191,10 @@ class IsolationForestAnomalyDetector:
                 narrative_parts.append(f"Total data volume {val:.1f} MB exceeds peer baseline by {mult:.1f}x")
             elif "devices" in f_name and val > 2:
                 narrative_parts.append(f"Accessed {int(val)} distinct machines (lateral movement warning)")
+            elif f_name == "peer_vol_zscore" and val > 2.0:
+                narrative_parts.append(f"Peer volume Z-Score of +{val:.2f}σ indicates extreme statistical anomaly vs department")
             elif factor["importance_score"] > 2.0:
-                narrative_parts.append(f"Abnormal pattern on '{f_name}': {val:.2f} (peer baseline: {factor['baseline_mean']:.2f})")
+                narrative_parts.append(f"Abnormal deviation on '{f_name}': {val:.2f} (peer baseline: {factor['baseline_mean']:.2f})")
                 
         if not narrative_parts:
             narrative = "Activity patterns are consistent with normal departmental baseline."
