@@ -266,9 +266,7 @@ Keep the briefing crisp, authoritative, and formatted in clean GitHub markdown."
             candidate_models = [
                 "openai/gpt-oss-120b",
                 "qwen/qwen3.8-27b",
-                "openai/gpt-oss-20b",
-                "llama-3.3-70b-versatile",
-                "llama-3.1-8b-instant"
+                "openai/gpt-oss-20b"
             ]
             last_err = ""
             for model_name in candidate_models:

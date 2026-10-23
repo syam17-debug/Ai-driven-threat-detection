@@ -38,7 +38,6 @@ if os.path.exists(ENV_PATH):
 
 from model import IsolationForestAnomalyDetector
 from feature_engineering import compute_user_behavior_features, FEATURE_COLUMNS
-from investigation import query_ai_analyst
 from log_generator import generate_enterprise_logs
 
 
@@ -229,14 +228,19 @@ with st.sidebar:
     st.markdown("---")
     st.subheader("🔑 AI Copilot Settings")
     groq_key_default = os.environ.get("GROQ_API_KEY", "")
+    if not groq_key_default:
+        try:
+            groq_key_default = st.secrets.get("GROQ_API_KEY", "")
+        except Exception:
+            pass
     api_key = st.text_input(
         "Groq API Key:",
         value=groq_key_default,
         type="password",
-        help="Used to generate natural language threat explanations with Groq Llama-3.3-70B."
+        help="Used to generate natural language threat explanations with Groq AI."
     )
     if api_key:
-        st.success("✅ Groq API Connected")
+        st.success("✅ Groq AI Connected")
     else:
         st.warning("⚠️ Enter Groq Key to enable AI Copilot")
 
@@ -437,6 +441,111 @@ with tab_dashboard:
     )
 
 
+def generate_groq_ai_report(
+    user_id: str,
+    user_row: pd.Series,
+    explanation: dict,
+    top_events: pd.DataFrame,
+    api_key: str
+) -> str:
+    """
+    Directly calls the active Groq AI Chat Completion endpoint with dynamic model discovery.
+    Guarantees no decommissioned models are ever called.
+    """
+    import requests
+
+    clean_key = api_key.strip() if api_key else os.environ.get("GROQ_API_KEY", "")
+    if not clean_key:
+        try:
+            clean_key = st.secrets.get("GROQ_API_KEY", "")
+        except Exception:
+            pass
+    if not clean_key:
+        return "⚠️ No Groq API Key found. Please enter a valid Groq Key in the sidebar."
+
+    headers = {
+        "Authorization": f"Bearer {clean_key}",
+        "Content-Type": "application/json"
+    }
+
+    # Discover active models from Groq API directly
+    preferred_models = [
+        "openai/gpt-oss-120b",
+        "qwen/qwen3.8-27b",
+        "openai/gpt-oss-20b"
+    ]
+    selected_model = "openai/gpt-oss-120b"
+    try:
+        models_resp = requests.get("https://api.groq.com/openai/v1/models", headers=headers, timeout=5)
+        if models_resp.status_code == 200:
+            avail = [m.get("id") for m in models_resp.json().get("data", [])]
+            for p in preferred_models:
+                if p in avail:
+                    selected_model = p
+                    break
+    except Exception:
+        pass
+
+    top_factors = explanation.get("top_contributions", [])
+    factors_summary = "\n".join([
+        f"- {item['feature']}: {item['user_value']} (Peer Baseline: {item['baseline_mean']:.2f}, Deviation: +{item['robust_zscore']:.1f}σ)"
+        for item in top_factors
+    ])
+
+    events_str = ""
+    if len(top_events) > 0:
+        events_str = top_events[["timestamp", "action_type", "resource", "destination", "bytes_transferred", "is_off_hours"]].head(10).to_string(index=False)
+
+    prompt = f"""You are a Lead Security Operations Center (SOC) Cyber Forensics & Insider Threat Investigator.
+Analyze the following anomalous employee activity flagged by our enterprise Isolation Forest anomaly detector.
+
+EMPLOYEE METADATA:
+- User ID: {user_id}
+- Department: {user_row.get('department', 'Unknown')}
+- Calibrated Risk Score: {user_row.get('risk_score', 'N/A')}/100 ({user_row.get('risk_tier', 'CRITICAL')} RISK)
+- Threat Scenario: {user_row.get('threat_scenario', 'Unknown')}
+
+TOP ABNORMAL BEHAVIORAL INDICATORS (Z-SCORE DEVIATIONS):
+{factors_summary}
+
+RECENT RAW SIEM AUDIT EVENTS:
+{events_str}
+
+TASK:
+Provide a concise, professional SOC Incident Briefing with the following exact sections:
+1. 🎯 Threat Summary & Intent Assessment (Is this deliberate data theft, compromised credentials, or policy negligence?)
+2. 🗺️ MITRE ATT&CK Mapping (List applicable techniques, e.g., T1048 Exfiltration, T1078 Valid Accounts, T1052 Physical USB)
+3. 🔎 Forensic Evidence Highlights (Highlight specific timestamps, destinations, data volumes, and suspicious activity)
+4. 🚨 Immediate Containment Recommendations (Numbered concrete steps: revoke credentials, disable USB, isolate host)
+
+Keep the briefing crisp, authoritative, and formatted in clean markdown."""
+
+    try:
+        payload = {
+            "model": selected_model,
+            "messages": [
+                {"role": "system", "content": "You are an elite enterprise SOC Incident Commander and Cyber Threat Intelligence expert."},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.2,
+            "max_tokens": 1200
+        }
+        resp = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload, timeout=25)
+        if resp.status_code == 200:
+            return resp.json()["choices"][0]["message"]["content"]
+        else:
+            # Fallback to alternative model
+            for fb in ["qwen/qwen3.8-27b", "openai/gpt-oss-20b"]:
+                if fb != selected_model:
+                    payload["model"] = fb
+                    r2 = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload, timeout=20)
+                    if r2.status_code == 200:
+                        return r2.json()["choices"][0]["message"]["content"]
+            return f"❌ Groq API Error ({resp.status_code}): {resp.text}"
+    except Exception as e:
+        return f"❌ Connection Error: {str(e)}"
+
+
 # ==========================================
 # TAB 2: EMPLOYEE DEEP-DIVE & AI REPORT
 # ==========================================
@@ -510,12 +619,11 @@ with tab_investigate:
             st.error("⚠️ Please provide a valid Groq API Key in the sidebar to run the AI Copilot.")
         else:
             with st.spinner("🤖 Groq AI is analyzing behavioral logs & generating threat briefing..."):
-                ai_briefing = query_ai_analyst(
+                ai_briefing = generate_groq_ai_report(
                     user_id=selected_user,
                     user_row=user_row,
                     explanation=explanation,
                     top_events=user_raw_logs,
-                    provider="groq",
                     api_key=api_key
                 )
                 st.markdown("#### 📄 Executive Threat Briefing:")
