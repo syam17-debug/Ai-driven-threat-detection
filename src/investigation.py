@@ -263,7 +263,7 @@ Keep the briefing crisp, authoritative, and formatted in clean GitHub markdown."
                 "Authorization": f"Bearer {api_key.strip()}",
                 "Content-Type": "application/json"
             }
-            candidate_models = ["openai/gpt-oss-120b", "qwen/qwen3.8-27b", "openai/gpt-oss-20b", "llama-3.3-70b-versatile"]
+            candidate_models = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "llama3-70b-8192", "mixtral-8x7b-32768"]
             last_err = ""
             for model_name in candidate_models:
                 payload = {
