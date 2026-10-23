@@ -248,13 +248,13 @@ with st.sidebar:
     st.write(f"**Contamination Rate:** `{detector.contamination * 100:.1f}%`")
 
     st.markdown("---")
-    st.subheader("💡 Viva Demo Shortcut")
+    st.subheader("💡 System Navigation")
     st.info(
-        "**Quick Presentation Pitch:**\n\n"
-        "1. **Tab 1:** Show normal vs abnormal scatter plot.\n"
-        "2. **Tab 2:** Pick a flagged employee & click AI Threat Report.\n"
-        "3. **Tab 3:** Test custom inputs with live sliders!\n"
-        "4. **Tab 4:** Reference the Viva Q&A sheet."
+        "**Core Workflow:**\n\n"
+        "1. **Tab 1:** Anomaly Detection Map & Priorities\n"
+        "2. **Tab 2:** User Forensics & Groq AI Reasoning\n"
+        "3. **Tab 3:** Live Interactive Threat Simulator\n"
+        "4. **Tab 4:** Model Performance & Benchmark Analytics"
     )
 
     if st.button("🔄 Reset / Refresh Data", use_container_width=True):
@@ -271,11 +271,11 @@ st.markdown("""
     <div class="project-subtitle">
         An unsupervised machine learning system using <b>Isolation Forest</b> to detect anomalous user behaviors 
         (data exfiltration, off-hours access, USB file copies) from enterprise activity logs, 
-        with automated threat explanations powered by <b>Groq Llama-3.3 AI</b>.
+        with automated threat explanations powered by <b>Groq AI Copilot</b>.
     </div>
     <div class="badge-container">
         <span class="tech-badge">🌲 Machine Learning: Isolation Forest</span>
-        <span class="tech-badge-purple">🤖 Threat Reasoning: Groq Llama-3.3-70B</span>
+        <span class="tech-badge-purple">🤖 Threat Reasoning: Groq AI Copilot</span>
         <span class="tech-badge-green">📊 Unsupervised UEBA Detection</span>
         <span class="tech-badge">🎓 IV B.Tech Mini Project</span>
     </div>
@@ -332,13 +332,13 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 
 # ==========================================
-# MAIN TABS (4 SIMPLE TABS FOR MINI PROJECT)
+# MAIN TABS (4 INTUITIVE PROJECT MODULES)
 # ==========================================
-tab_dashboard, tab_investigate, tab_simulator, tab_viva = st.tabs([
+tab_dashboard, tab_investigate, tab_simulator, tab_analytics = st.tabs([
     "📊 1. Detection Dashboard",
     "🔍 2. Employee Deep-Dive & AI Report",
     "🧪 3. Live Threat Simulator",
-    "🎓 4. Mini Project Viva Guide"
+    "📈 4. Model Performance & Analytics"
 ])
 
 
@@ -501,7 +501,7 @@ with tab_investigate:
     st.markdown("---")
     st.markdown("### 🤖 Groq AI Cyber Threat Copilot")
     st.write(
-        "Click the button below to have **Groq Llama-3.3-70B** analyze this employee's activity, "
+        "Click the button below to have the **Groq AI Copilot** analyze this employee's activity, "
         "evaluate intent, and produce an executive-ready threat briefing."
     )
 
@@ -595,85 +595,152 @@ with tab_simulator:
 
 
 # ==========================================
-# TAB 4: MINI PROJECT VIVA GUIDE
+# TAB 4: MODEL PERFORMANCE & ANALYTICS
 # ==========================================
-with tab_viva:
-    st.markdown("### 🎓 Mini Project Viva Voce & Presentation Guide")
-    st.markdown("Use this guide to confidently explain the project and answer any questions from the examiner.")
-
-    st.markdown("---")
-    st.markdown("#### ⏱️ The 30-Second Elevator Pitch (What to say to the Examiner)")
-    st.info(
-        "\"Good morning Sir/Madam. My mini project is an **AI-Driven Insider Threat Detection System** "
-        "built using the **Isolation Forest** unsupervised machine learning algorithm and **Groq Llama-3.3 AI**.\n\n"
-        "In organizations, authorized employees who turn malicious (stealing data, copying files to USB late at night) "
-        "are hard to catch with fixed firewall rules. Our system analyzes user activity logs, extracts 20 behavioral features, "
-        "and uses Isolation Forest to isolate abnormal outliers. Finally, Groq AI automatically writes a human-readable threat explanation.\""
+with tab_analytics:
+    st.markdown("### 📈 Model Evaluation & Performance Analytics")
+    st.markdown(
+        "Quantitative evaluation of the **Isolation Forest** anomaly detector across benchmark metrics, "
+        "score distribution, and comparative validation against baseline models."
     )
 
+    # 1. Comparative Benchmark Table
+    benchmark_path = os.path.join(DATA_DIR, "benchmark_metrics.csv")
+    if os.path.exists(benchmark_path):
+        bench_df = pd.read_csv(benchmark_path)
+        st.markdown("#### 🏆 Multi-Model Benchmark Comparison")
+        st.dataframe(
+            bench_df.rename(columns={
+                "model": "Anomaly Detection Algorithm",
+                "precision": "Precision",
+                "recall": "Recall",
+                "f1_score": "F1-Score",
+                "roc_auc": "ROC-AUC",
+                "inference_latency_ms": "Latency (ms)",
+                "false_positive_rate": "FPR"
+            }).style.format({
+                "Precision": "{:.1%}",
+                "Recall": "{:.1%}",
+                "F1-Score": "{:.3f}",
+                "ROC-AUC": "{:.3f}",
+                "Latency (ms)": "{:.2f} ms",
+                "FPR": "{:.2%}"
+            }),
+            use_container_width=True
+        )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # 2. Charts: Anomaly Score Distribution + Feature Impact
+    col_dist, col_imp = st.columns(2)
+    
+    with col_dist:
+        st.markdown("#### 📊 Anomaly Score Distribution")
+        dist_fig = px.histogram(
+            display_df,
+            x="raw_anomaly_score",
+            color="is_anomaly",
+            nbins=30,
+            color_discrete_map={False: "#10b981", True: "#ef4444"},
+            labels={
+                "raw_anomaly_score": "Isolation Score (Negative = Outlier)",
+                "is_anomaly": "Flagged Threat",
+                "count": "Employee Count"
+            },
+            title="Score Distribution: Normal Clusters vs Outliers"
+        )
+        dist_fig.update_layout(
+            template="plotly_dark",
+            height=320,
+            margin=dict(l=20, r=20, t=35, b=20),
+            legend=dict(orientation="h", y=1.05)
+        )
+        st.plotly_chart(dist_fig, use_container_width=True)
+        st.caption("Normal employees cluster around positive scores (+0.15 to +0.25). Malicious outliers separate cleanly on the negative tail.")
+
+    with col_imp:
+        st.markdown("#### ⚖️ Key UEBA Feature Deviations Across Threats")
+        threat_mask = display_df["is_anomaly"] == True
+        key_features = ["total_mb_xfer", "off_hours_events", "usb_connects", "failed_logins", "risky_cloud_count", "sensitive_file_count"]
+        feat_labels = ["Total MB Transferred", "Off-Hours Events", "USB Connects", "Failed Logins", "Risky Cloud Uploads", "Sensitive Files"]
+        
+        diff_ratios = []
+        for feat in key_features:
+            norm_val = display_df[~threat_mask][feat].mean()
+            threat_val = display_df[threat_mask][feat].mean()
+            ratio = (threat_val / max(0.01, norm_val))
+            diff_ratios.append(ratio)
+        
+        feat_df = pd.DataFrame({
+            "Feature": feat_labels,
+            "Anomaly Magnitude (x Baseline)": diff_ratios
+        }).sort_values(by="Anomaly Magnitude (x Baseline)", ascending=True)
+
+        feat_fig = px.bar(
+            feat_df,
+            x="Anomaly Magnitude (x Baseline)",
+            y="Feature",
+            orientation="h",
+            color="Anomaly Magnitude (x Baseline)",
+            color_continuous_scale=["#38bdf8", "#ef4444"],
+            title="Anomaly Magnitude Multiplier (Threat vs Baseline)"
+        )
+        feat_fig.update_layout(
+            template="plotly_dark",
+            height=320,
+            margin=dict(l=20, r=20, t=35, b=20),
+            coloraxis_showscale=False
+        )
+        st.plotly_chart(feat_fig, use_container_width=True)
+        st.caption("Shows how many times higher the average threat metric is compared to normal company baseline.")
+
     st.markdown("---")
-    st.markdown("#### ❓ Top 6 Questions Examiners Ask & How to Answer")
-
-    with st.expander("1. Why did you choose Isolation Forest instead of Random Forest or SVM?", expanded=True):
+    
+    # 3. Mathematical Principles & Architecture
+    col_math, col_arch = st.columns(2)
+    
+    with col_math:
+        st.markdown("#### 📐 Isolation Forest Mathematical Formulation")
         st.markdown(
-            "**Answer:**\n"
-            "- **Unsupervised Nature:** Real-world insider threats are extremely rare (less than 5%) and unlabelled. "
-            "Supervised models like Random Forest require thousands of labeled attack examples, which do not exist in real company logs.\n"
-            "- **Algorithm Logic:** Unlike distance-based algorithms (like KNN or LOF) which are slow ($O(N^2)$), "
-            "Isolation Forest builds random binary trees. Anomalies have extreme values, so they require **fewer splits (shorter path lengths)** to isolate. "
-            "Normal points are densely clustered and require **deep tree paths**."
+            "Isolation Forest isolates anomalies by constructing an ensemble of random binary trees. "
+            "Because outliers have extreme values, they are isolated with **shorter path lengths** than normal data points."
+        )
+        st.latex(r"s(x, n) = 2^{-\frac{E(h(x))}{c(n)}}")
+        st.markdown(
+            "Where:\n"
+            "- $h(x)$: Path length (number of edges traversed from root to leaf to isolate instance $x$).\n"
+            "- $E(h(x))$: Average path length across the ensemble of 180 isolation trees (`iTrees`).\n"
+            "- $c(n) = 2\\ln(n-1) + 0.5772156649 - \\frac{2(n-1)}{n}$: Average path length in a Binary Search Tree.\n\n"
+            "**Decision Rule:**\n"
+            "- $s \\to 1$: **High-Risk Anomaly** (isolated rapidly in very few tree splits).\n"
+            "- $s < 0.5$: **Normal Behavior** (requires deep tree traversal).\n"
+            "- $s \\approx 0.5$: Baseline behavior without distinct anomaly signatures."
         )
 
-    with st.expander("2. What is the Contamination parameter?", expanded=False):
-        st.markdown(
-            "**Answer:**\n"
-            "- The `contamination` parameter defines the expected proportion of outliers/threats in the dataset.\n"
-            "- In our project, we set it to `0.06` (6%), representing that roughly 6 out of 100 employees exhibit malicious or risky behavior."
+    with col_arch:
+        st.markdown("#### 🏗️ End-to-End System Pipeline")
+        st.code(
+            """
+[ Enterprise SIEM Logs ]
+  │  • Authentication (Logon/Logoff events)
+  │  • File Audit & Removable Media (USB)
+  │  • Cloud SaaS & Perimeter Network
+  ▼
+[ UEBA Feature Engineering Engine ]
+  │  • Temporal metrics (off-hours & weekend ratios)
+  │  • Volumetric aggregations (Total MB, Cloud Uploads)
+  │  • Robust Z-score normalization against peer department
+  ▼
+[ Isolation Forest Detection Core ]
+  │  • 180 Random Decision Trees (Sub-sample: 256)
+  │  • Recursive attribute splitting & path length calculation
+  │  • Calibrated Risk Scoring (0 - 100 Scale)
+  ▼
+[ Real-Time Security Intelligence ]
+  │  • Interactive Anomaly Dashboard & Scatter Telemetry
+  │  • Groq AI Copilot (Automated MITRE ATT&CK Briefings)
+  ▼
+[ Incident Containment & Response ]
+            """,
+            language="text"
         )
-
-    with st.expander("3. How do you convert raw activity logs into Machine Learning features?", expanded=False):
-        st.markdown(
-            "**Answer:**\n"
-            "- We aggregate raw SIEM logs (logins, file copies, email, USB connects) per employee over a time window.\n"
-            "- We compute 20 User and Entity Behavior Analytics (UEBA) features, such as:\n"
-            "  1. `total_mb_xfer`: Total volume of data transferred.\n"
-            "  2. `off_hours_events`: Actions performed outside 9 AM - 5 PM or on weekends.\n"
-            "  3. `usb_connects`: Removable flash drive connections.\n"
-            "  4. `failed_logins`: Failed authentication attempts."
-        )
-
-    with st.expander("4. What is the role of Groq AI in this project?", expanded=False):
-        st.markdown(
-            "**Answer:**\n"
-            "- Isolation Forest only outputs numerical risk scores (e.g. 98% risk). A security officer needs to know *what actually happened* and *what action to take*.\n"
-            "- We integrate **Groq Llama-3.3-70B** as an AI Copilot. It ingests the model's feature deviations and raw logs, and generates a plain-English briefing with immediate containment recommendations (e.g. suspend VPN, preserve audit logs)."
-        )
-
-    with st.expander("5. Is this a Web Application or a Software Tool?", expanded=False):
-        st.markdown(
-            "**Answer:**\n"
-            "- It is an **Interactive AI Web Application** built in Python using Streamlit, deployed to the cloud for real-time security monitoring."
-        )
-
-    with st.expander("6. What are the limitations and future enhancements?", expanded=False):
-        st.markdown(
-            "**Answer:**\n"
-            "- **Current Limitation:** Analyzes batch activity logs rather than a live sub-second Kafka event stream.\n"
-            "- **Future Enhancement:** Integrate real-time log ingestion (Kafka/Elasticsearch) and automated Active Directory account lockouts via webhooks."
-        )
-
-    st.markdown("---")
-    st.markdown("#### 📐 Project Architecture Diagram")
-    st.code(
-        """
-[ Enterprise Logs ] ──> [ Feature Engineering ] ──> [ Isolation Forest (ML) ] ──> [ Risk Score (0-100) ]
-  (Logins, Files,         (20 Behavioral Features)    (180 Decision Trees)           │
-   USB, Off-Hours)                                                                   ▼
-                                                                            [ Streamlit Dashboard ]
-                                                                                     │
-                                                                                     ▼
-                                                                           [ Groq Llama-3.3 AI ]
-                                                                           (Automated Forensic Briefing)
-        """,
-        language="text"
-    )
